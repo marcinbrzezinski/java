@@ -1,11 +1,13 @@
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int rozmiar = -1;
         System.out.println("Program liczy średnią i medianę z wartości podanych przez użytkownika.");
         System.out.println("Podaj rozmiar tablicy ");
@@ -32,7 +34,8 @@ public class Main {
             suma += tablica[index];
         }
         System.out.println("Suma: " + suma);
-        System.out.println("Srednia: " + suma / rozmiar);
+        double srednia = suma / rozmiar;
+        System.out.println("Srednia: " + srednia);
 
         Arrays.sort(tablica);
         System.out.println("Posortowana tablica: ");
@@ -40,21 +43,36 @@ public class Main {
             System.out.print(tablica[index] + " ");
         }
         boolean parzysta;
-        if(rozmiar % 2 == 0){
+        if (rozmiar % 2 == 0) {
             parzysta = true;
-        }else {
+        } else {
             parzysta = false;
         }
         System.out.println("Parzysta: " + parzysta);
-        if (parzysta){
+
+        double mediana;
+        if (parzysta) {
             double lewa = tablica[rozmiar / 2 - 1];
             double prawa = tablica[rozmiar / 2 + 1];
-            System.out.println("Mediana: " + (lewa + prawa) / 2.0);
-        }else{
+            mediana = (lewa + prawa) / 2.0;
+            System.out.println("Mediana.: " + mediana);
+        } else {
             int srodek = (rozmiar + 1) / 2;
-            System.out.println("Mediana: " + tablica[srodek - 1]);
+            mediana = tablica[srodek - 1];
+            System.out.println("Mediana: " + mediana);
         }
+        // zapisywanie do pliku
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter("wynik.txt");   // <== try nie jest wymagany, lecz używam go do zamkniecia pliku
+            fileWriter.write("Mediana: " + mediana);
+            fileWriter.write("Srednia: " + srednia);
 
+        }finally {
+            if (fileWriter != null){
+                fileWriter.close();
+            }
+        }
     }
 
 }
